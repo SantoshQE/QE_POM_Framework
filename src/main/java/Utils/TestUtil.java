@@ -1,14 +1,12 @@
 package Utils;
 
 import Config.TestBase;
+import com.opencsv.CSVReader;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.openqa.selenium.*;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Base64;
 import java.util.Date;
 
@@ -199,4 +197,22 @@ public void switchToFrame() {
 //		js.executeScript("$.growl.warning({ title: 'Warning!', message: 'your warning message goes here' });");
         Thread.sleep(5000);
     }
+    public static void readTestData() throws FileNotFoundException,InterruptedException,IOException {
+        CSVReader reader = new CSVReader(new FileReader(System.getProperty("user.dir")+"/src/main/resources/TestData"));
+        String[] cell;
+        while((cell=reader.readNext())!=null)
+        {
+            for(int i = 0; i<cell.length; i++)
+            {
+                String col1 =cell[i];
+                String col2 =cell[i+1];
+                String col3 =cell[i+2];
+            }
+
+
+
+        }
+    }
+
+
 }

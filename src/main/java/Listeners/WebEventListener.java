@@ -1,6 +1,7 @@
-package Utils;
+package Listeners;
 
 import Config.TestBase;
+import Utils.TestUtil;
 import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebDriver;

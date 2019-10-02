@@ -4,7 +4,9 @@ import Config.TestBase;
 import ExtentReportListener.ExtentManager;
 import Listeners.CustomListeners;
 import Pages.twitLoginPage;
+import Utils.TestUtil;
 import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.Status;
 import org.testng.annotations.*;
 import java.lang.reflect.Method;
 
@@ -29,12 +31,10 @@ public class TC3_twitLoginChrome  extends TestBase
     public void launchBrowser_Chrome()
     {
         System.out.println("Inside @BeforeTest --launchBrowser_Chrome ");
+        //this.getClass().getName();
         TestBase.open_Browser("Chrome");
         twtLoginPg = new twitLoginPage(driver);
         twtLoginPg.launchTwitterLoginPg("https://twitter.com/login?lang=en");
-//        ExtentManager.getTest().log(Status.INFO,"launchBrowser_Chrome");
-    // extentTestbase.assignCategory("Regression");
-      //  init = new TestBase();
     }
     @Test(priority = 1,testName ="TC3_twitLoginChrome--TestNGDescription :-- Log into twitter account" )
     public void twitterLogin_Chrome() throws Throwable
@@ -45,9 +45,13 @@ public class TC3_twitLoginChrome  extends TestBase
         //childTest = ExtentManager.getTest().createNode("Log into twitter application");
         //childTest = parentTest.createNode("Log into twitter application");
         //childTest.log(Status.PASS, MarkupHelper.createLabel("Twitter login successful", ExtentColor.BLUE));
+        TestUtil.readTestData();
+
+
+
         twtLoginPg.loginToTwitterAccount("9967887510","Tcs@1983");
        //extent = ExtentManager.getTest().assignCategory();
-      //  ExtentManager.getTest().assignCategory("PositiveTests");
+        ExtentManager.getTest().assignCategory("Regression");
 
     }
     @Test(priority = 2,testName ="TC3_twitLoginChrome--TestNGDescription :-- Navigate to twitter profile page" )
@@ -58,7 +62,7 @@ public class TC3_twitLoginChrome  extends TestBase
        // parentTest = report.createTest("Parent Test --navigateToProfile");
       //  childTest = parentTest.createNode("Navigate To profile Link");
        // childTest.log(Status.PASS, MarkupHelper.createLabel("Profile page navigate", ExtentColor.BLUE));
-       // ExtentManager.getTest().assignCategory("PositiveTests");
+        ExtentManager.getTest().assignCategory("Regression");
     }
     @AfterTest()
     public void tearDown_Chrome()
