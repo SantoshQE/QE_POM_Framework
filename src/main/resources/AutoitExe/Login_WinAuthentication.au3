@@ -1,0 +1,15 @@
+AutoItSetOption("WinTitleMatchMode","2")
+WinWait("168.0.8:8081")
+$title = WinGetTitle("168.0.8:8081")
+$UN=WinGetText($title,"User Name:")
+sleep(1000)
+ControlSend($title,"",$UN,"santosh");Sets Username
+$PWD=WinGetText($title,"Password:")
+sleep(1000)
+Send("{TAB 1}")
+sleep(1000)
+ControlSend($title,"",$PWD,"Santosh1983");Sets PWD
+sleep(2000)
+Send("{TAB}")
+sleep(2000)
+Send("{ENTER}")

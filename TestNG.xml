@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="TestingSuite" parallel="none">
+    <listeners>
+       <!-- <listener class-name="ExtentReportListener.ExtentReporterNG" />-->
+        <listener class-name="Listeners.CustomListeners"/>
+    </listeners>
+    <test name="TC#1">
+    <classes>
+        <class name="TestCases.TC3_twitLoginChrome"/>
+    </classes>
+</test>
+    <test name="TC#2">
+        <classes>
+            <class name="TestCases.TC3_twitLoginChrome"/>
+        </classes>
+    </test>
+</suite>
