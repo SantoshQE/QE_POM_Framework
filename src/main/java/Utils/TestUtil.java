@@ -6,6 +6,10 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.openqa.selenium.*;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.Base64;
 import java.util.Date;
@@ -52,7 +56,7 @@ public class TestUtil extends TestBase {
         return screenshotPath;
 		//FileUtils.copyFile(scrFile, new File(System.getProperty("user.dir") + "/Screenshots/" + screenshotName));
 	}
-    public static String captureScreenshotBASE64(String TCName) throws IOException, InterruptedException
+/*    public static String captureScreenshotBASE64(String TCName) throws IOException, InterruptedException
     {
         File scrFile = ((TakesScreenshot) TestBase.driver).getScreenshotAs(OutputType.FILE);
         Date d = new Date();
@@ -67,7 +71,38 @@ public class TestUtil extends TestBase {
         String base64 = Base64.getEncoder().encodeToString(imageBytes);
         return base64;
         //Extent.log(LogStatus.INFO, "Snapshot below: " + extent.addBase64ScreenShot("data:image/png;base64,"+base64));
+    }*/
+    public static String captureScreenshotBASE64(String TCName) throws IOException, InterruptedException, AWTException
+    {
+        Date d = new Date();
+        screenshotName = d.toString().replace(":", "_").replace(" ", "_") + ".png";
+        try{
+            // Creating Robot class object
+            Robot robotClassObject = new Robot();
+            // Get screen size
+            Rectangle screenSize = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
+            // Capturing screenshot by providing size
+            BufferedImage tmp = robotClassObject.createScreenCapture(screenSize);
+            // Defining destination file path
+            String path=System.getProperty("user.dir")+"/Screenshots/"+TCName+screenshotName;
+            // To copy temp image in to permanent file
+            ImageIO.write(tmp, "png",new File(path));
+            //return path;
+            File finalDestination = new File(path);
+          // FileUtils.copyFile(new File(path), finalDestination);
+            Thread.sleep(2000);
+            InputStream is = new FileInputStream(finalDestination);
+            byte[] imageBytes = IOUtils.toByteArray(is);
+            //Thread.sleep(2000);
+            String base64 = Base64.getEncoder().encodeToString(imageBytes);
+            return base64;
+        }catch(Exception e)
+        {
+            System.out.println("Some exception occured." + e.getMessage());
+            return "";
+        }
     }
+
     public String base64conversion(WebDriver driver) throws Exception
     {
         TakesScreenshot newScreen = (TakesScreenshot) driver;

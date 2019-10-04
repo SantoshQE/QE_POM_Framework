@@ -9,6 +9,7 @@ import com.aventstack.extentreports.markuputils.ExtentColor;
 import com.aventstack.extentreports.markuputils.MarkupHelper;
 import org.testng.*;
 
+import java.awt.*;
 import java.io.IOException;
 import java.lang.reflect.Method;
 /*import TestUtil.MonitoringMail;
@@ -28,8 +29,8 @@ public class CustomListeners extends TestBase implements ITestListener,ISuiteLis
        ExtentManager.getTest().log(Status.PASS, "Test passed for Test Method "+arg0.getName().toUpperCase());
        try
        {
-           screenshotPath = TestUtil.captureScreenshotBASE64(arg0.getName().toUpperCase().toString());
-       } catch (IOException | InterruptedException e)
+           screenshotPath = TestUtil.captureScreenshotBASE64(arg0.getName().toLowerCase().toString());
+       } catch (IOException | InterruptedException | AWTException e)
        {
            e.printStackTrace();
        }
@@ -45,11 +46,11 @@ public class CustomListeners extends TestBase implements ITestListener,ISuiteLis
         ExtentManager.getTest().log(Status.FAIL, "Test Failed");
         System.setProperty("org.uncommons.reportng.escape-output","false");
         try {
-            screenshotPath = TestUtil.captureScreenshotBASE64(arg0.getName().toUpperCase().toString());
-        } catch (IOException | InterruptedException e) {
+            screenshotPath = TestUtil.captureScreenshotBASE64(arg0.getName().toLowerCase().toString());
+        } catch (IOException | InterruptedException | AWTException e) {
             e.printStackTrace();
         }
-        ExtentManager.getTest().log(Status.FAIL, arg0.getName().toUpperCase()+" Failed with exception : "+arg0.getThrowable().getMessage().substring(0,arg0.getThrowable().getMessage().toString().indexOf("For documentation on this error")));
+        ExtentManager.getTest().log(Status.FAIL, arg0.getName().toUpperCase()+" Failed with exception : "+arg0.getThrowable().getMessage());
         // System.out.println(screenshotPath);
         ExtentManager.getTest().log(Status.FAIL, "Please refer below Snapshot: " + ExtentManager.getTest().addScreenCaptureFromBase64String(screenshotPath.toString()));
         // report.flush();

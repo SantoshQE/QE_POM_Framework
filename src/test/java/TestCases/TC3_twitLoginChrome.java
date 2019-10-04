@@ -45,9 +45,7 @@ public class TC3_twitLoginChrome  extends TestBase
         //childTest = ExtentManager.getTest().createNode("Log into twitter application");
         //childTest = parentTest.createNode("Log into twitter application");
         //childTest.log(Status.PASS, MarkupHelper.createLabel("Twitter login successful", ExtentColor.BLUE));
-        TestUtil.readTestData();
-
-
+   //     TestUtil.readTestData();
 
         twtLoginPg.loginToTwitterAccount("9967887510","Tcs@1983");
        //extent = ExtentManager.getTest().assignCategory();
