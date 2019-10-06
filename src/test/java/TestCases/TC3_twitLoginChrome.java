@@ -36,16 +36,17 @@ public class TC3_twitLoginChrome  extends TestBase
         twtLoginPg = new twitLoginPage(driver);
         twtLoginPg.launchTwitterLoginPg("https://twitter.com/login?lang=en");
     }
-    @Test(priority = 1,testName ="TC3_twitLoginChrome--TestNGDescription :-- Log into twitter account" )
+    @Test(priority = 1,testName ="TC3_twitLoginChrome--TestNGDescription :-- Log into twitter account")
     public void twitterLogin_Chrome() throws Throwable
     {
+
        // init.test.assignCategory("Smoke");
 //        extentTest.assignCategory("Regression");
         //parentTest = report.createTest("Parent Test --twitterLogin_Chrome");
         //childTest = ExtentManager.getTest().createNode("Log into twitter application");
         //childTest = parentTest.createNode("Log into twitter application");
         //childTest.log(Status.PASS, MarkupHelper.createLabel("Twitter login successful", ExtentColor.BLUE));
-   //     TestUtil.readTestData();
+  //      TestUtil.readTestData();
 
         twtLoginPg.loginToTwitterAccount("9967887510","Tcs@1983");
        //extent = ExtentManager.getTest().assignCategory();

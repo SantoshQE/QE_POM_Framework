@@ -22,7 +22,19 @@ public class TestUtil extends TestBase {
 	public static String screenshotPath;
 	public static String screenshotName;
     public static WebDriver driver;
+    static CSVReader reader;
 
+    static {
+        try {
+            reader = new CSVReader(new FileReader(System.getProperty("user.dir")+"/src/main/resources/TestData/TestData.csv"));
+        } catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public TestUtil() throws FileNotFoundException {
+    }
 
 /*   public TestUtil(WebDriver driver)
     {
@@ -233,19 +245,14 @@ public void switchToFrame() {
         Thread.sleep(5000);
     }
     public static void readTestData() throws FileNotFoundException,InterruptedException,IOException {
-        CSVReader reader = new CSVReader(new FileReader(System.getProperty("user.dir")+"/src/main/resources/TestData"));
+
         String[] cell;
         while((cell=reader.readNext())!=null)
         {
             for(int i = 0; i<cell.length; i++)
             {
-                String col1 =cell[i];
-                String col2 =cell[i+1];
-                String col3 =cell[i+2];
+                System.out.println(cell[i]);
             }
-
-
-
         }
     }
 
