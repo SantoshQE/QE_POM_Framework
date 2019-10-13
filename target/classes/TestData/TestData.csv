@@ -1,0 +1,6 @@
+TestCaseName,RunMode,Browser,username,pwd
+TC1,Y,Chrome,9967887510,Tcs@1983
+TC2,Y,Chrome,9967887510,Tcs@1983
+TC4,Y,Chrome,9967887510,Tcs@1983
+TC3_twitLoginChrome123,Y,Chrome,9967887510,Tcs@1983
+TC3_twitLoginChrome,Y,IE,9967887510,Tcs@1983

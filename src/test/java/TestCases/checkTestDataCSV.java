@@ -19,7 +19,7 @@ public class checkTestDataCSV extends TestBase
     public static void main(String[] args) {
         try {
          //   CSVReader testcases = new CSVReader(new FileReader(System.getProperty("user.dir")+"/src/main/resources/TestData/TestData.csv"));
-           CsvReader testcases = new CsvReader((System.getProperty("user.dir")+"/src/main/resources/TestData/TestData.csv"));
+            CsvReader testcases = new CsvReader((System.getProperty("user.dir")+"/src/main/resources/TestData/TestData.csv"));
             testcases.readHeaders();
             //get total numbers of header column
             int numberOfHeaders=testcases.getHeaderCount();
