@@ -10,6 +10,8 @@ import org.openqa.selenium.ie.InternetExplorerOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.testng.annotations.AfterSuite;
+import org.testng.annotations.NoInjection;
+import org.testng.annotations.Test;
 
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
@@ -58,7 +60,7 @@ public class TestBase
             if ("chrome".equalsIgnoreCase(browserName))
             {
                 log.debug("inside chrome driver initialization step");
-                System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir").toString() + "/src/main/resources/ChromeDriver/Chrome76/chromedriver.exe");
+                System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir").toString() + "/src/main/resources/ChromeDriver/Chrome78/chromedriver.exe");
                 driver = new ChromeDriver();
                 driver.manage().window().maximize();
               driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
@@ -96,8 +98,7 @@ public class TestBase
             driver = new FirefoxDriver();
         }*/
     @AfterSuite
-    public void tearDown()
-    {
+    public void tearDown() throws Exception {
         if (driver != null)
         {
             driver.quit();
@@ -116,6 +117,13 @@ public class TestBase
             System.out.println("Error....." + e.getStackTrace());
         }
     }
+/*    @Test(priority = 1,testName="testBase_startUp")
+    public void testBase_startUp(String browser, String uRL)
+    {
+        System.out.println("startUp from TestBase Class...");
+        open_Browser(browser);
+        driver.get(uRL);
+    }*/
 }
 
 

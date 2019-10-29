@@ -15,28 +15,23 @@ import java.util.concurrent.TimeUnit;
 public class twitLoginPage
 {
     public static WebDriver driver;
-
     @BeforeTest
-    public void setUp() {
+    public void setUp()
+    {
        TestBase t = new TestBase();
-       // WebDriver driver = t.getDriver();
     }
-
     public twitLoginPage(WebDriver driver)
     {
         TestBase t = new TestBase();
-      //  WebDriver driver = t.getDriver();
         this.driver = t.getDriver();
         PageFactory.initElements(driver,this);
     }
-   // ExtentReporterNG ExtentRp = new ExtentReporterNG();
-    @FindBy(xpath =  Twitter_OR.TwitterSite )
-    public WebElement TwitterSite;
     @FindBy(xpath =  Twitter_OR.twit_username )
     public WebElement  twit_username;
     @FindBy(xpath =  Twitter_OR.twit_password )
     public WebElement  twit_password;
     @FindBy(xpath =  Twitter_OR.twit_BtnLogin )
+
     public WebElement  twit_BtnLogin;
     @FindBy(xpath =  Twitter_OR.twit_BrowsePicLink )
     public WebElement  twit_BrowsePicLink;
@@ -60,7 +55,8 @@ public class twitLoginPage
     public WebElement  twit_MoreLink;
     @FindBy(xpath =  Twitter_OR.twit_EditProfileLink )
     public WebElement  twit_EditProfileLink;
-
+    @FindBy(xpath =  Twitter_OR.TwitterSite )
+    public WebElement TwitterSite;
 
     public void launchTwitterLoginPg(String uRL)
     {
