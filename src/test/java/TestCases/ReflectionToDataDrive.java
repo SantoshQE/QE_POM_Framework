@@ -2,8 +2,14 @@ package TestCases;
 
 import Utils.ExcelReader;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.util.HashMap;
+
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
 
 public class ReflectionToDataDrive
 {
@@ -25,6 +31,8 @@ public class ReflectionToDataDrive
     public static String TestCasePkgName = "TestCases";
     public static Class<? extends Class> TestCaseClassName;
     private Class<? extends Class> TestCaseClassInstance;
+    HashMap<Integer, String> ReflectMap = new HashMap<>();
+
     static StringBuilder sb;
 
     public ReflectionToDataDrive()
@@ -33,14 +41,11 @@ public class ReflectionToDataDrive
         ExL = new ExcelReader(DataPath);
         System.out.println(ExL);
     }
-
     public int getRowCountReflectDD(String sheetName)
     {
         int rowCount = ExL.getRowCount(sheetName);
         return  rowCount;
     }
-
-
   public static void main(String args[])
     {
        // ReflectionToDataDrive reflectDD = new ReflectionToDataDrive();
@@ -59,18 +64,39 @@ public class ReflectionToDataDrive
         //Object objKeywordName = TestCaseClassName.newInstance();
         return TestCaseClassName;
     }
-    public void countAnnotations(String className) throws IllegalAccessException, InstantiationException {
+    public void countAnnotations(String className) throws IllegalAccessException, InstantiationException
+    {
         TestCaseClassInstance = readClass(className);
-        //Object objKeywordName = TestCaseClassName.newInstance();
-      // int TotalMethods   = TestCaseClassName.getDeclaredMethods().length;
-     //   System.out.println("Total Methods in TestCase are --: >> "+TotalMethods);
         Method[] methods = TestCaseClassInstance.getDeclaredMethods();
         for (int i = 0; i < methods.length; i++)
         {
             System.out.println("public method: " + methods[i]);
+            if(methods[i].getAnnotation(AfterTest.class) != null)    // @AfterTest Annotated method
+            {
+                System.out.println(methods[i].getAnnotation(AfterTest.class).description());
+            }
+            if(methods[i].getAnnotation(BeforeTest.class) != null)   // @BeforeTest Annotated method
+            {
+                System.out.println(methods[i].getAnnotation(BeforeTest.class).description());
+
+            }
+            if(methods[i].getAnnotation(Test.class) != null) // @Test Annotated method
+            {
+                System.out.println(methods[i].getAnnotation(Test.class).priority());
+                int runPriority = methods[i].getAnnotation(Test.class).priority();
+                ReflectMap.put(runPriority,methods[i].getName());
+            }
+        }
+        for (Integer key : ReflectMap.keySet())
+        {
+            System.out.println("Method Priority is : "+key+"   for method named : "+ReflectMap.get(key));
         }
         Object objKeywordName = TestCaseClassInstance.newInstance();
         int TotalMethods   = TestCaseClassInstance.getDeclaredMethods().length;
+
+
+
+
         //@TEST BLOCK :						//THIS LOOP IS TO FIND THE EXACT METHOD NAME IN THE CLASS AND EXECUTE THE @Test BLOCK
 
     /*    for(int mn=0;mn<=TotalMethods;mn++)
