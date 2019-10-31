@@ -1,42 +1,57 @@
 package TestCases;
 
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
+import Config.TestBase;
+import ExtentReportListener.ExtentManager;
+import org.testng.annotations.*;
 
-public class DatadrivenTest
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import com.aventstack.extentreports.ExtentTest;
+import Listeners.CustomListeners;
+
+@Listeners({CustomListeners.class})
+public class DatadrivenTest extends TestBase
 {
     public String a;
     public static ReflectionToDataDrive ReflectDD;
+    public static ExtentTest test;
+
     public DatadrivenTest(String a)
     {
         this.a= a;
     }
+    @BeforeMethod
+    public void setup(Method method) {
+        String testMethodName = method.getName();
+        String descriptiveTestName = method.getAnnotation(Test.class).testName();
+        test = ExtentManager.startTest(descriptiveTestName, ExtentManager.getLabel(method.getDeclaringClass().getName()));
+    }
     @BeforeTest(description="BeforeTest")
-    public void startUp() throws InstantiationException, IllegalAccessException{
+    public void startUp() throws Exception
+    {
         ReflectDD = new ReflectionToDataDrive();
         System.out.println("StartUp ..."+a);
         //ReflectDD.readClass("TestCases.DatadrivenTest");
       //  System.out.println( ReflectDD.readClass("DatadrivenTest"));
         ReflectDD.countAnnotations("DatadrivenTest");
     }
-    @Test(priority=156)
+    @Test(priority=1,testName ="TestStep1")
     public void TestStep1()
     {
         System.out.println("Total rows in testdata is : "+ReflectDD.getRowCountReflectDD("TestData"));
         System.out.println("TestStep..1"+a);
     }
-    @Test(priority = 2121)
+    @Test(priority = 2,testName ="TestStep2")
     public void TestStep2()
     {
         System.out.println("TestStep..2"+a);
     }
-    @Test(priority = 93)
+    @Test(priority = 3,testName ="TestStep3")
     public void TestStep3()
     {
         System.out.println("TestStep..3"+a);
     }
-    @Test(priority = 400)
+    @Test(priority = 4,testName ="TestStep4")
     public void TestStep4()
     {
         System.out.println("TestStep1..4"+a);

@@ -3,10 +3,16 @@ package TestCases;
 import Utils.ExcelReader;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.HashMap;
+import java.util.Set;
 
+import org.reflections.Reflections;
+import org.reflections.scanners.MethodAnnotationsScanner;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -64,8 +70,7 @@ public class ReflectionToDataDrive
         //Object objKeywordName = TestCaseClassName.newInstance();
         return TestCaseClassName;
     }
-    public void countAnnotations(String className) throws IllegalAccessException, InstantiationException
-    {
+    public void countAnnotations(String className) throws Exception {
         TestCaseClassInstance = readClass(className);
         Method[] methods = TestCaseClassInstance.getDeclaredMethods();
         for (int i = 0; i < methods.length; i++)
@@ -90,9 +95,32 @@ public class ReflectionToDataDrive
         for (Integer key : ReflectMap.keySet())
         {
             System.out.println("Method Priority is : "+key+"   for method named : "+ReflectMap.get(key));
+/*            String methodName = ReflectMap.get(key);
+            Method TestMethodName = TestCaseClassName.getClass().getMethod(methodName);
+            TestMethodName.invoke(TestCaseClassName); // pass arg*/
+          //  runAllAnnotatedWith(Test.class);
+            Object objKeywordName = TestCaseClassName.newInstance();
+            String methodName = ReflectMap.get(key);
+            Method TestMethodName = TestCaseClassName.getMethod(methodName);
+            if(TestMethodName.isAnnotationPresent(Test.class))
+            {
+                // Invoke method with appropriate arguments
+                //Object obj = TestMethodName.invoke(TestCaseClassName.newInstance(), null);
+                TestMethodName.invoke(objKeywordName, null);
+
+            }
+
+         /*   Method[] methodName = TestCaseClassName.getMethods();
+            if (methodName.isAnnotationPresent(mod.class)) {
+                // Invoke method with appropriate arguments
+                Object obj = mt.invoke(runClass, null);
+            }*/
+
+
+
         }
-        Object objKeywordName = TestCaseClassInstance.newInstance();
-        int TotalMethods   = TestCaseClassInstance.getDeclaredMethods().length;
+       // Object objKeywordName = TestCaseClassInstance.newInstance();
+        //int TotalMethods   = TestCaseClassInstance.getDeclaredMethods().length;
 
 
 
@@ -158,6 +186,19 @@ public class ReflectionToDataDrive
                 }
             }
         }*/
+    }
+    public static void runAllAnnotatedWith(Class<? extends Annotation> annotation) throws Exception
+    {
+        Reflections reflections = new Reflections(new ConfigurationBuilder()
+                .setUrls(ClasspathHelper.forJavaClassPath())
+                .setScanners(new MethodAnnotationsScanner()));
+        Set<Method> methods = reflections.getMethodsAnnotatedWith(annotation);
+
+        for (Method m : methods)
+        {
+            // for simplicity, invokes methods as static without parameters
+            m.invoke(null);
+        }
     }
 }
 
