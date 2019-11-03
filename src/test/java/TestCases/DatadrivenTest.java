@@ -16,10 +16,10 @@ public class DatadrivenTest extends TestBase
     public static ReflectionToDataDrive ReflectDD;
     public static ExtentTest test;
 
-    public DatadrivenTest(String a)
+/*    public DatadrivenTest(String a)
     {
         this.a= a;
-    }
+    }*/
     @BeforeMethod
     public void setup(Method method) {
         String testMethodName = method.getName();
@@ -29,7 +29,10 @@ public class DatadrivenTest extends TestBase
     @BeforeTest(description="BeforeTest")
     public void startUp() throws Exception
     {
-        ReflectDD = new ReflectionToDataDrive();
+        System.out.println(this.getClass().getName());
+        System.out.println("Inside @BeforeTest --launchBrowser_Chrome ");
+        TestBase.open_Browser("Chrome");
+        ReflectDD = new ReflectionToDataDrive(driver);
         System.out.println("StartUp ..."+a);
         //ReflectDD.readClass("TestCases.DatadrivenTest");
       //  System.out.println( ReflectDD.readClass("DatadrivenTest"));
@@ -56,9 +59,13 @@ public class DatadrivenTest extends TestBase
     {
         System.out.println("TestStep1..4"+a);
     }
-    @AfterTest(description="AfterTest")
+ /*   @AfterTest(description="AfterTest")
     public void testDown()
     {
         System.out.println("testDown..");
-    }
+        if(driver!=null)
+        {
+            driver.close();
+        }
+    }*/
 }
