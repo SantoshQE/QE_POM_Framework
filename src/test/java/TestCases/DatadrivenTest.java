@@ -3,22 +3,22 @@ package TestCases;
 import Config.TestBase;
 import ExtentReportListener.ExtentManager;
 import org.testng.annotations.*;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import com.aventstack.extentreports.ExtentTest;
 import Listeners.CustomListeners;
+import TestCases.ReflectionToDataDrive;
 
 @Listeners({CustomListeners.class})
 public class DatadrivenTest extends TestBase
 {
-    public String a;
     public static ReflectionToDataDrive ReflectDD;
     public static ExtentTest test;
 
-/*    public DatadrivenTest(String a)
+/*    public DatadrivenTest() throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException
     {
-        this.a= a;
+*//*        ReflectDD = new ReflectionToDataDrive("DatadrivenTest");
+        ReflectDD.readClass("DatadrivenTest");*//*
     }*/
     @BeforeMethod
     public void setup(Method method) {
@@ -29,37 +29,28 @@ public class DatadrivenTest extends TestBase
     @BeforeTest(description="BeforeTest")
     public void startUp() throws Exception
     {
+        ReflectDD = new ReflectionToDataDrive("DatadrivenTest");
+        //ReflectDD.readClass("DatadrivenTest");
+        System.out.println("StartUp ...");
+/*        //ReflectDD.readClass("TestCases.DatadrivenTest");
+      //  System.out.println( ReflectDD.readClass("DatadrivenTest")); */
+        ReflectDD.dataDriveTest("DatadrivenTest");
+    }
+    @Test(priority=1,testName ="TestStep1")
+    public void LaunchApplication()
+    {
         System.out.println(this.getClass().getName());
         System.out.println("Inside @BeforeTest --launchBrowser_Chrome ");
         TestBase.open_Browser("Chrome");
-        ReflectDD = new ReflectionToDataDrive(driver);
-        System.out.println("StartUp ..."+a);
-        //ReflectDD.readClass("TestCases.DatadrivenTest");
-      //  System.out.println( ReflectDD.readClass("DatadrivenTest"));
-        ReflectDD.countAnnotations("DatadrivenTest");
     }
-    @Test(priority=1,testName ="TestStep1")
+    @Test(priority=2,testName ="TestStep1")
     public void TestStep1()
     {
         System.out.println("Total rows in testdata is : "+ReflectDD.getRowCountReflectDD("TestData"));
-        System.out.println("TestStep..1"+a);
+        System.out.println("TestStep..1");
     }
-    @Test(priority = 2,testName ="TestStep2")
-    public void TestStep2()
-    {
-        System.out.println("TestStep..2"+a);
-    }
-    @Test(priority = 3,testName ="TestStep3")
-    public void TestStep3()
-    {
-        System.out.println("TestStep..3"+a);
-    }
-    @Test(priority = 4,testName ="TestStep4")
-    public void TestStep4()
-    {
-        System.out.println("TestStep1..4"+a);
-    }
- /*   @AfterTest(description="AfterTest")
+
+     @AfterTest(description="AfterTest")
     public void testDown()
     {
         System.out.println("testDown..");
@@ -67,5 +58,5 @@ public class DatadrivenTest extends TestBase
         {
             driver.close();
         }
-    }*/
+    }
 }
