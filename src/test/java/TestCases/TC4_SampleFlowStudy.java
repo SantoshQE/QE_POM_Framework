@@ -4,14 +4,13 @@ import Config.TestBase;
 import ExtentReportListener.ExtentManager;
 import Listeners.CustomListeners;
 import Pages.twitLoginPage;
-import Utils.TestUtil;
 import com.aventstack.extentreports.ExtentTest;
-import com.aventstack.extentreports.Status;
 import org.testng.annotations.*;
+
 import java.lang.reflect.Method;
 
 @Listeners({CustomListeners.class})
-public class TC3_twitLoginChrome  extends TestBase
+public class TC4_SampleFlowStudy extends TestBase
 {
     public static twitLoginPage twtLoginPg ;
     public static TestBase init ;
@@ -21,7 +20,8 @@ public class TC3_twitLoginChrome  extends TestBase
     public static ExtentTest childTest;
 
     @BeforeMethod
-        public void setup(Method method) {
+        public void setup(Method method)
+    {
         System.out.println(method);
         String testMethodName = method.getName();
         String descriptiveTestName = method.getAnnotation(Test.class).testName();
@@ -32,19 +32,16 @@ public class TC3_twitLoginChrome  extends TestBase
     {
         System.out.println(this.getClass().getName());
         System.out.println("Inside @BeforeTest --launchBrowser_Chrome ");
-        TestBase.open_Browser("Chrome");
-        twtLoginPg = new twitLoginPage(driver);
-        twtLoginPg.launchTwitterLoginPg("https://twitter.com/login?lang=en");
     }
     @Test(priority = 1,testName ="TC3_twitLoginChrome--TestNGDescription :-- Log into twitter account")
     public void twitterLogin_Chrome() throws Throwable
     {
-        twtLoginPg.loginToTwitterAccount("9967887510","Tcs@1983");
+        System.out.println("Test Step1 -- Log into twitter account");
         ExtentManager.getTest().assignCategory("Regression");
     }
     @Test(priority = 2,testName ="TC3_twitLoginChrome--TestNGDescription :-- Navigate to twitter profile page" )
     public void navigateToProfile_Chrome() throws Throwable {
-        twtLoginPg.navigateToProfile();
+        System.out.println("Test Step2 -- Navigate to twitter profile page");
         ExtentManager.getTest().assignCategory("Regression");
     }
     @AfterTest()

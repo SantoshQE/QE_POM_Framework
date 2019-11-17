@@ -58,7 +58,8 @@ public class ReflectionToDataDrive // extends TestBase
     private Object TestMethodName;
     private Object Method = TestMethodName;
 
-    public ReflectionToDataDrive(String className) throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+    public ReflectionToDataDrive(String className) throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException
+    {
         String DataPath =  System.getProperty("user.dir")+"/src/main/resources/TestData/TestData.xlsx";
         ExL = new ExcelReader(DataPath);
         System.out.println(ExL);
@@ -66,7 +67,6 @@ public class ReflectionToDataDrive // extends TestBase
         readClass(className);
         //objClass = TestCaseClassName.getConstructor().newInstance();
         System.out.println(getObject());
-
     }
     public Object getObject() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException
     {
@@ -94,129 +94,101 @@ public class ReflectionToDataDrive // extends TestBase
     public void dataDriveTest(String className) throws Exception
     {
         int totalDataRows = getRowCountReflectDD("TestData");
-
-                TestCaseClassInstance = readClass(className);
-                Method[] methods = TestCaseClassInstance.getDeclaredMethods();
-                //load all the methods with @Test annotation in a HashMap
-                for (int testIter = 0; testIter< methods.length; testIter++)
+        int runIteration = 0;
+        System.out.println(TestCaseClassName.getName());
+        for (int rowNum = 1; rowNum <= totalDataRows; rowNum++)
+        {
+            String TCName = ExL.getCellData("TestData", "TestCaseName", rowNum);
+            String RunMode = ExL.getCellData("TestData", "RunMode", rowNum);
+            if ((TestCaseClassName.getName().contains(TCName)) && RunMode.equals("Y")) {
+                System.out.println("TestCase Name matched with the name in TestData sheet");
+                //count total number of run iterations
+                runIteration = runIteration + 1;
+            }
+        }
+        System.out.println("Total data row iterations are : " + runIteration);
+        for (int dataIter = 1; dataIter <= runIteration; dataIter++)
+        {
+            TestCaseClassInstance = readClass(className);
+            Method[] methods = TestCaseClassInstance.getDeclaredMethods();
+            //load all the methods with @Test annotation in a HashMap
+            for (int testIter = 0; testIter < methods.length; testIter++) {
+                if (methods[testIter].getAnnotation(Test.class) != null) // @Test Annotated method
                 {
-                    if (methods[testIter].getAnnotation(Test.class) != null) // @Test Annotated method
-                    {
-                        System.out.println(methods[testIter].getAnnotation(Test.class).priority());
-                        int runPriority = methods[testIter].getAnnotation(Test.class).priority();
-                        ReflectMap.put(runPriority, methods[testIter].getName());
-                    }
+                    System.out.println(methods[testIter].getAnnotation(Test.class).priority());
+                    int runPriority = methods[testIter].getAnnotation(Test.class).priority();
+                    ReflectMap.put(runPriority, methods[testIter].getName());
                 }
-                //Find method with BeforeTest Annotation first and execute that method first
-                            for (int beforeTestIter = 0; beforeTestIter< methods.length; beforeTestIter++) {
-                                System.out.println("public method: " + methods[beforeTestIter]);
-                                if (methods[beforeTestIter].getAnnotation(BeforeTest.class) != null)    // @BeforeTest Annotated method
-                                {
-                                    System.out.println(methods[beforeTestIter].getAnnotation(BeforeTest.class).description());
-                                    Method beforeTestMName = TestCaseClassName.getDeclaredMethod(methods[beforeTestIter].getName());
-                                    //beforeTestMName.invoke(objClass);
-                                    if (ReflectionToDataDrive.objClass != null)
-                                    {
-                                        break;
-                                    }
-                                    else
-                                    {
-                                        Object invokeReturnObj = beforeTestMName.invoke(objClass);
-                                    }
+            }
+            //Find method with BeforeTest Annotation first and execute that method first
+            for (int beforeTestIter = 0; beforeTestIter < methods.length; beforeTestIter++) {
+                System.out.println("public method: " + methods[beforeTestIter]);
+                if (methods[beforeTestIter].getAnnotation(BeforeTest.class) != null)    // @BeforeTest Annotated method
+                {
+                    System.out.println(methods[beforeTestIter].getAnnotation(BeforeTest.class).description());
+                    Method beforeTestMName = TestCaseClassName.getDeclaredMethod(methods[beforeTestIter].getName());
+                    //beforeTestMName.invoke(objClass);
+                    if (ReflectionToDataDrive.objClass != null) {
+                        break;
+                    } else {
+                        Object invokeReturnObj = beforeTestMName.invoke(objClass);
+                    }
                                  /*   Object invokeReturnObj = beforeTestMName.invoke(objClass);
                                     if ( invokeReturnObj != null)
                                     {
                                         break;
                                     }*/
-                                }
-                            }
-                //Iterate through the hashmap and run the @Test methods in sequence as per priority i.e. @Test(priority=1,2,...n)
-                for (Integer key : ReflectMap.keySet())
-                {
-                    System.out.println("Method Priority is : "+key+"   for method named : "+ReflectMap.get(key));
-                    String methodName = ReflectMap.get(key);
-                    Method TestMethodName = TestCaseClassName.getDeclaredMethod(methodName);
-                    if(TestMethodName.isAnnotationPresent(Test.class))
-                    {
-                        System.out.println("Priority of the method from hashmap is  :  "+(key));
-                        //Find method with @BeforeMethod Test then pass the methodname from @Test annotated method to @BeforeMethod
-                        for (int beforeMethodIter = 0; beforeMethodIter< methods.length; beforeMethodIter++)
+                }
+            }
+            //Iterate through the hashmap and run the @Test methods in sequence as per priority i.e. @Test(priority=1,2,...n)
+            for (Integer key : ReflectMap.keySet()) {
+                System.out.println("Method Priority is : " + key + "   for method named : " + ReflectMap.get(key));
+                String methodName = ReflectMap.get(key);
+                Method TestMethodName = TestCaseClassName.getDeclaredMethod(methodName);
+                if (TestMethodName.isAnnotationPresent(Test.class)) {
+                    System.out.println("Priority of the method from hashmap is  :  " + (key));
+                    //Find method with @BeforeMethod Test then pass the methodname from @Test annotated method to @BeforeMethod
+                    for (int beforeMethodIter = 0; beforeMethodIter < methods.length; beforeMethodIter++) {
+                        System.out.println("public method: " + methods[beforeMethodIter]);
+                        if (methods[beforeMethodIter].getAnnotation(BeforeMethod.class) != null)    // @AfterTest Annotated method
                         {
-                            System.out.println("public method: " + methods[beforeMethodIter]);
-                            if (methods[beforeMethodIter].getAnnotation(BeforeMethod.class) != null)    // @AfterTest Annotated method
-                            {
-                                System.out.println(methods[beforeMethodIter].getAnnotation(BeforeMethod.class).description());
-                              // Method beforeMethodMName = TestCaseClassName.getDeclaredMethod(methods[beforeMethodIter].getName(),methods[beforeMethodIter].getClass());
+                            System.out.println(methods[beforeMethodIter].getAnnotation(BeforeMethod.class).description());
+                            // Method beforeMethodMName = TestCaseClassName.getDeclaredMethod(methods[beforeMethodIter].getName(),methods[beforeMethodIter].getClass());
 
-                                Class<?>[] parameterTypes = {java.lang.reflect.Method.class};
-                               Method beforeMethodMName = TestCaseClassName.getDeclaredMethod(methods[beforeMethodIter].getName(),parameterTypes);
-                               // Method beforeMethodMName = TestCaseClassName.getMethod("setup");
-                              //  System.out.println(methods[beforeMethodIter].getAnnotation(BeforeTest.class).getClass());
-                                int paramCount = TestCaseClassName.getDeclaredMethods()[beforeMethodIter].getGenericParameterTypes().length;
-                                Object argArray[] = new Object[paramCount];
-                                sb = new StringBuilder(32);
-                                    for(int ptn=0;ptn<paramCount;ptn++)
-                                    {
-                                        String fPList = TestCaseClassName.getDeclaredMethods()[beforeMethodIter].getParameterTypes()[ptn].toString();
-                                        String finalParamList = fPList.replace("class", "").trim();
-                                        System.out.println(finalParamList);
-                                        argArray[ptn] = finalParamList;
-                                        beforeMethodMName.invoke(objClass,TestMethodName);
-                                        break;
-                                    }
-                                TestMethodName.invoke(objClass);    //then execute the @Test Method
+                            Class<?>[] parameterTypes = {java.lang.reflect.Method.class};
+                            Method beforeMethodMName = TestCaseClassName.getDeclaredMethod(methods[beforeMethodIter].getName(), parameterTypes);
+                            // Method beforeMethodMName = TestCaseClassName.getMethod("setup");
+                            //  System.out.println(methods[beforeMethodIter].getAnnotation(BeforeTest.class).getClass());
+                            int paramCount = TestCaseClassName.getDeclaredMethods()[beforeMethodIter].getGenericParameterTypes().length;
+                            Object argArray[] = new Object[paramCount];
+                            sb = new StringBuilder(32);
+                            for (int ptn = 0; ptn < paramCount; ptn++) {
+                                String fPList = TestCaseClassName.getDeclaredMethods()[beforeMethodIter].getParameterTypes()[ptn].toString();
+                                String finalParamList = fPList.replace("class", "").trim();
+                                System.out.println(finalParamList);
+                                argArray[ptn] = finalParamList;
+                                beforeMethodMName.invoke(objClass, TestMethodName);
                                 break;
                             }
-
+                            TestMethodName.invoke(objClass);    //then execute the @Test Method
+                            break;
                         }
                     }
                 }
-                //Find method with AfterTest Annotation at the end and execute that method
-                for (int afterTestIter = 0; afterTestIter< methods.length; afterTestIter++)
-                {
-                    System.out.println("public method: " + methods[afterTestIter]);
-                    if (methods[afterTestIter].getAnnotation(AfterTest.class) != null)    // @AfterTest Annotated method
-                    {
-                        System.out.println(methods[afterTestIter].getAnnotation(AfterTest.class).description());
-                        Method afterTestMName = TestCaseClassName.getDeclaredMethod(methods[afterTestIter].getName());
-                        afterTestMName.invoke(objClass);
-                        break;
-                    }
-                }
-                //Return number of rows from testdata sheet matching the testcase class name and invoke the methods
-                    /*        rowCount = ExL.getRowCount("TestData");
-                            int dataIter = 0;
-                            for( dataIter =1;dataIter<= rowCount;dataIter++)
-                            {*/
-
-                /*        }*/
-
-                    /*        for (Integer key : ReflectMap.keySet())
-                            {
-                                System.out.println("Method Priority is : "+key+"   for method named : "+ReflectMap.get(key));
-                                Object objClass = TestCaseClassName.getConstructor().newInstance();
-                                String methodName = ReflectMap.get(key);
-                                Method TestMethodName = TestCaseClassName.getDeclaredMethod(methodName);
-                                if(TestMethodName.isAnnotationPresent(Test.class))
-                                {
-                                    TestMethodName.invoke(objClass, null);
-                                }
-                            }*/
-                //  driver.close();
-
-
             }
-                    /*    public static void runAllAnnotatedWith(Class<? extends Annotation> annotation) throws Exception
-                        {
-                            Reflections reflections = new Reflections(new ConfigurationBuilder()
-                                    .setUrls(ClasspathHelper.forJavaClassPath())
-                                    .setScanners(new MethodAnnotationsScanner()));
-                            Set<Method> methods = reflections.getMethodsAnnotatedWith(annotation);
-
-                            for (Method m : methods)
-                            {
-                                m.invoke(null);
-                            }
-                        }*/
+            //Find method with AfterTest Annotation at the end and execute that method
+            for (int afterTestIter = 0; afterTestIter < methods.length; afterTestIter++)
+            {
+                System.out.println("public method: " + methods[afterTestIter]);
+                if (methods[afterTestIter].getAnnotation(AfterTest.class) != null)    // @AfterTest Annotated method
+                {
+                    System.out.println(methods[afterTestIter].getAnnotation(AfterTest.class).description());
+                    Method afterTestMName = TestCaseClassName.getDeclaredMethod(methods[afterTestIter].getName());
+                    afterTestMName.invoke(objClass);
+                    break;
+                }
+            }
+        }
+    }
 }
 
