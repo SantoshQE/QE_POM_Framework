@@ -133,11 +133,11 @@ public class ReflectionToDataDrive // extends TestBase
                     } else {
                         Object invokeReturnObj = beforeTestMName.invoke(objClass);
                     }
-                                 /*   Object invokeReturnObj = beforeTestMName.invoke(objClass);
+                                    Object invokeReturnObj = beforeTestMName.invoke(objClass);
                                     if ( invokeReturnObj != null)
                                     {
                                         break;
-                                    }*/
+                                    }
                 }
             }
             //Iterate through the hashmap and run the @Test methods in sequence as per priority i.e. @Test(priority=1,2,...n)

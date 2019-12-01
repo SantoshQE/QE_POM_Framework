@@ -61,6 +61,14 @@ public class twitLoginPage
     public void launchTwitterLoginPg(String uRL)
     {
         driver.get(uRL);
+        try
+        {
+            Assert.assertTrue(driver.getTitle().contains("Twitter"));
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
     }
    // @Step("navigateToProfile - twitLoginPage")
     public void navigateToProfile()
